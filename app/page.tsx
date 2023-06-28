@@ -179,7 +179,9 @@ export default function Home() {
             </Button>
 
             <DialogTrigger>
-              <Button variant={"outline"}>Show Tip</Button>
+              <Button type="button" variant={"outline"}>
+                Show Tip
+              </Button>
             </DialogTrigger>
           </div>
         </form>
