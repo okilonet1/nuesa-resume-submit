@@ -21,9 +21,7 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { toast } from "react-hot-toast";
 import { ClipLoader } from "react-spinners";
-import Image from "next/image";
 
-import Logo from "@/assets/NUESA LOGO.png";
 const formSchema = z.object({
   name: z.string().min(3).max(255),
   email: z.string().email(),
@@ -97,17 +95,6 @@ export default function Home() {
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-5 p-2 max-w-lg mx-auto "
         >
-          <Image
-            alt="logo"
-            src={Logo}
-            width={70}
-            height={70}
-            placeholder="blur"
-            className="mx-auto"
-          />
-          <h1 className="text-center text-2xl font-bold">
-            NUESA ABUAD RESUME UPLOAD
-          </h1>
           <FormField
             control={form.control}
             name="name"
