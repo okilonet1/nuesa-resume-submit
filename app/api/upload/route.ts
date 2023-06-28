@@ -103,7 +103,15 @@ export async function POST(request: Request) {
     try {
       const fileUpload = await uploadFile(file);
 
+      if (!fileUpload) {
+        throw new Error("Error uploading file");
+      }
+
       const publicUrl = await generatePublicUrl(fileUpload.id);
+
+      if (!publicUrl) {
+        throw new Error("Error generating public url");
+      }
 
       user = await prisma.user.create({
         data: {
