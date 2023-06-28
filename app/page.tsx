@@ -21,7 +21,9 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { toast } from "react-hot-toast";
 import { ClipLoader } from "react-spinners";
+import Image from "next/image";
 
+import Logo from "@/assets/NUESA LOGO.png";
 const formSchema = z.object({
   name: z.string().min(3).max(255),
   email: z.string().email(),
@@ -90,92 +92,106 @@ export default function Home() {
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-5 p-2 max-w-lg mx-auto"
-      >
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Full Name</FormLabel>
-              <FormControl>
-                <Input placeholder="John Doe" {...field} />
-              </FormControl>
-              <FormDescription>
-                Your Full Name as it appears on your certificate
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input placeholder="johndoe@nuesaabuad.com" {...field} />
-              </FormControl>
-              <FormDescription>Your active email address</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="phone"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Phone</FormLabel>
-              <FormControl>
-                <Input placeholder="+234 7057395799" {...field} />
-              </FormControl>
-              <FormDescription>Your active phone number</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+      <Dialog>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-5 p-2 max-w-lg mx-auto "
+        >
+          <Image
+            alt="logo"
+            src={Logo}
+            width={70}
+            height={70}
+            placeholder="blur"
+            className="mx-auto"
+          />
+          <h1 className="text-center text-2xl font-bold">
+            NUESA ABUAD RESUME UPLOAD
+          </h1>
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Full Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="John Doe" {...field} />
+                </FormControl>
+                <FormDescription>
+                  Your Full Name as it appears on your certificate
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input placeholder="johndoe@nuesaabuad.com" {...field} />
+                </FormControl>
+                <FormDescription>Your active email address</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="phone"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Phone</FormLabel>
+                <FormControl>
+                  <Input placeholder="+234 7057395799" {...field} />
+                </FormControl>
+                <FormDescription>Your active phone number</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="file"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Resume/CV</FormLabel>
+          <FormField
+            control={form.control}
+            name="file"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Resume/CV</FormLabel>
 
-              <Input
-                type="file"
-                accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                {...form.register("file")}
-              />
+                <Input
+                  type="file"
+                  accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                  {...form.register("file")}
+                />
 
-              <FormDescription>
-                Your most recent Resume/CV (PDF)
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                <FormDescription>
+                  Your most recent Resume/CV (PDF)
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div className="flex flex-row gap-1">
+            <Button type="submit" disabled={isLoading}>
+              Submit
+            </Button>
 
-        <Button type="submit" disabled={isLoading}>
-          Submit
-        </Button>
-
-        <Dialog>
-          <DialogTrigger>Tips</DialogTrigger>
-          <DialogContent>
-            <div style={{ display: "flex", justifyContent: "center" }}>
-              <InstagramEmbed
-                url="https://www.instagram.com/reel/CthLRw3NlNR/?igshid=MzRlODBiNWFlZA=="
-                width={328}
-              />
-            </div>
-          </DialogContent>
-        </Dialog>
-      </form>
+            <DialogTrigger>
+              <Button variant={"outline"}>Show Tip</Button>
+            </DialogTrigger>
+          </div>
+        </form>
+        <DialogContent>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <InstagramEmbed
+              url="https://www.instagram.com/reel/CthLRw3NlNR/?igshid=MzRlODBiNWFlZA=="
+              width={328}
+            />
+          </div>
+        </DialogContent>
+      </Dialog>
     </Form>
   );
 }
