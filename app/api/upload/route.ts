@@ -45,7 +45,11 @@ async function generatePublicUrl(id: string) {
   }
 }
 
-async function uploadFile(file: any) {
+async function uploadFile(
+  file: any,
+  userName: string,
+  type: "resume" | "itLetter"
+) {
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
 
@@ -53,11 +57,13 @@ async function uploadFile(file: any) {
   readableStream.push(buffer);
   readableStream.push(null);
 
+  const fileExtension = file.name.split(".").pop();
+
   try {
     const response = await drive.files.create({
       requestBody: {
         parents: [folderId],
-        name: file.name,
+        name: `${userName}-${type}.${fileExtension}`,
       },
       media: {
         mimeType: file.type,
@@ -78,12 +84,13 @@ async function uploadFile(file: any) {
 
 export async function POST(request: Request) {
   const formData = await request.formData();
-  const file = formData.get("file") as File;
+  const resume = formData.get("resume") as File;
+  const itLetter = formData.get("itLetter") as File;
   const name = formData.get("name") as string;
   const email = formData.get("email") as string;
   const phone = formData.get("phone") as string;
 
-  if (file.length < 1 || !name || !email || !phone) {
+  if (resume.length < 1 || itLetter.length || !name || !email || !phone) {
     return new NextResponse("Invalid Credentials", {
       status: 400,
     });
@@ -101,16 +108,26 @@ export async function POST(request: Request) {
 
   if (!alreadyFilled) {
     try {
-      const fileUpload = await uploadFile(file);
+      const resumeUpload = await uploadFile(resume, name, "resume");
+      const itLetterUpload = await uploadFile(itLetter, name, "itLetter");
 
-      if (!fileUpload) {
+      if (!resumeUpload) {
         throw new Error("Error uploading file");
       }
 
-      const publicUrl = await generatePublicUrl(fileUpload.id);
+      if (!itLetterUpload) {
+        throw new Error("Error uploading file");
+      }
 
-      if (!publicUrl) {
-        throw new Error("Error generating public url");
+      const resumePublicUrl = await generatePublicUrl(resumeUpload.id);
+      const itLetterPublicUrl = await generatePublicUrl(itLetterUpload.id);
+
+      if (!resumePublicUrl) {
+        throw new Error("Error generating public url for resume");
+      }
+
+      if (!itLetterPublicUrl) {
+        throw new Error("Error generating public url for it letter");
       }
 
       user = await prisma.user.create({
@@ -118,8 +135,9 @@ export async function POST(request: Request) {
           name: name,
           email: email,
           phone: phone,
-          previewResume: publicUrl?.webViewLink!,
-          downloadResume: publicUrl?.webContentLink!,
+          previewResume: resumePublicUrl?.webViewLink!,
+          downloadResume: resumePublicUrl?.webContentLink!,
+          itLetter: itLetterPublicUrl?.webViewLink!,
         },
       });
 

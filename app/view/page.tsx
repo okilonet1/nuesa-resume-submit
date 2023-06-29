@@ -36,6 +36,7 @@ async function page({}: pageProps) {
             <TableHead>Email</TableHead>
             <TableHead>Phone</TableHead>
             <TableHead className="text-center">Resume</TableHead>
+            <TableHead className="text-center">ITLetter</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -50,6 +51,11 @@ async function page({}: pageProps) {
                   <Button variant={"ghost"}>Download</Button>
                 </Link>
                 <Link href={user.previewResume} target="_blank">
+                  <Button variant={"ghost"}>Preview</Button>
+                </Link>
+              </TableCell>
+              <TableCell className="text-center">
+                <Link href={user.itLetter}>
                   <Button variant={"ghost"}>Preview</Button>
                 </Link>
               </TableCell>

@@ -26,7 +26,8 @@ const formSchema = z.object({
   name: z.string().min(3).max(255),
   email: z.string().email(),
   phone: z.string().min(10).max(15),
-  file: z.any(),
+  resume: z.any(),
+  itLetter: z.any(),
 });
 
 export default function Home() {
@@ -38,7 +39,8 @@ export default function Home() {
       name: "",
       email: "",
       phone: "",
-      file: null,
+      resume: null,
+      itLetter: null,
     },
   });
 
@@ -58,10 +60,13 @@ export default function Home() {
 
     const formData = new FormData();
 
-    if (data.file == null) {
-      toast.error("Please Upload a file");
+    if (data.resume == null) {
+      toast.error("Please Upload a Resume");
+    } else if (data.itLetter == null) {
+      toast.error("Please Upload a Internship Letter");
     } else {
-      formData.append("file", data.file[0]);
+      formData.append("resume", data.resume[0]);
+      formData.append("itLetter", data.itLetter[0]);
       formData.append("name", data.name);
       formData.append("email", data.email);
       formData.append("phone", data.phone);
@@ -142,7 +147,7 @@ export default function Home() {
 
           <FormField
             control={form.control}
-            name="file"
+            name="resume"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Resume/CV</FormLabel>
@@ -150,11 +155,32 @@ export default function Home() {
                 <Input
                   type="file"
                   accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                  {...form.register("file")}
+                  {...form.register("resume")}
                 />
 
                 <FormDescription>
                   Your most recent Resume/CV (PDF)
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="itLetter"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Industrial Attachment Letter</FormLabel>
+
+                <Input
+                  type="file"
+                  accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                  {...form.register("itLetter")}
+                />
+
+                <FormDescription>
+                  Your most stamped IT Letter from the School (PDF)
                 </FormDescription>
                 <FormMessage />
               </FormItem>
