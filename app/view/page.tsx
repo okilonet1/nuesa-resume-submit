@@ -20,7 +20,7 @@ async function getUsers() {
   return users;
 }
 
-export const revalidate = 60;
+export const revalidate = 30;
 
 async function page({}: pageProps) {
   const users = await getUsers();
