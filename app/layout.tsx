@@ -1,12 +1,16 @@
 import ToastContext from "@/contexts/ToastContext";
 import "./globals.css";
 import { Inter } from "next/font/google";
-import { Metadata } from "next";
+import { type Metadata } from "next";
 import Image from "next/image";
-
-import Logo from "@/assets/NUESA LOGO.png";
-import BG from "@/assets/SL_072620_32930_03.jpg";
-import Link from "next/link";
+import {
+  ClerkProvider,
+  SignInButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from "@clerk/nextjs";
+import { Button } from "@/components/ui/button";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,48 +26,30 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <div className="space-y-8 ">
-          {/* <div
-            style={{
-              position: "fixed",
-              height: "100vh",
-              width: "100vw",
-              overflow: "hidden",
-              zIndex: "-1",
-            }}
-          >
-            <Image
-              alt="Mountains"
-              src={BG}
-              placeholder="blur"
-              quality={100}
-              fill
-              sizes="100vw"
-              style={{
-                objectFit: "cover",
-              }}
-            />
-          </div> */}
-
-          <Link href="/">
-            <Image
-              alt="logo"
-              src={Logo}
-              width={70}
-              height={70}
-              placeholder="blur"
-              className="mx-auto"
-            />
-            <h1 className="text-center text-2xl font-bold">
-              NUESA ABUAD RESUME UPLOAD
-            </h1>
-          </Link>
-        </div>
-        <ToastContext />
-        {children}
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body
+          className={inter.className}
+          style={{
+            marginLeft: "auto",
+            marginRight: "auto",
+            justifyContent: "center",
+            alignItems: "center",
+            width: "100%",
+            height: "100%",
+            backgroundColor: "#f9fafb",
+          }}
+        >
+          <header className="p-2 backdrop-filter backdrop-blur-sm bg-opacity-10 border border-gray-100 flex items-center justify-end mb-2">
+            <Button variant={"ghost"}>View Students</Button>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
+          </header>
+          <ToastContext />
+          {children}
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

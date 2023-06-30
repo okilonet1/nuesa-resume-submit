@@ -20,7 +20,10 @@ import {
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { toast } from "react-hot-toast";
-import { ClipLoader } from "react-spinners";
+
+import Logo from "@/assets/NUESA LOGO.png";
+import Link from "next/link";
+import Image from "next/image";
 
 const formSchema = z.object({
   name: z.string().min(3).max(255),
@@ -94,8 +97,23 @@ export default function Home() {
   }
 
   return (
-    <Form {...form}>
-      <Dialog>
+    <>
+      <div className="space-y-8 ">
+        <Link href="/">
+          <Image
+            alt="logo"
+            src={Logo}
+            width={70}
+            height={70}
+            placeholder="blur"
+            className="mx-auto"
+          />
+          <h1 className="text-center text-2xl font-bold">
+            NUESA ABUAD RESUME UPLOAD
+          </h1>
+        </Link>
+      </div>
+      <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-5 p-2 max-w-lg mx-auto "
@@ -190,23 +208,20 @@ export default function Home() {
             <Button type="submit" disabled={isLoading}>
               Submit
             </Button>
-
-            <DialogTrigger>
-              <Button type="button" variant={"outline"}>
-                Show Tip
-              </Button>
-            </DialogTrigger>
+            <Dialog>
+              <DialogContent>
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <InstagramEmbed
+                    url="https://www.instagram.com/reel/CthLRw3NlNR/?igshid=MzRlODBiNWFlZA=="
+                    width={328}
+                  />
+                </div>
+              </DialogContent>
+              <DialogTrigger type="button">Show Tip</DialogTrigger>
+            </Dialog>
           </div>
         </form>
-        <DialogContent>
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <InstagramEmbed
-              url="https://www.instagram.com/reel/CthLRw3NlNR/?igshid=MzRlODBiNWFlZA=="
-              width={328}
-            />
-          </div>
-        </DialogContent>
-      </Dialog>
-    </Form>
+      </Form>
+    </>
   );
 }
