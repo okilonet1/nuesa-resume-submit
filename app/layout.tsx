@@ -35,11 +35,7 @@ export default function RootLayout({
           style={{
             marginLeft: "auto",
             marginRight: "auto",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
-            height: "100%",
-            backgroundColor: "#f9fafb",
+            backgroundColor: "#def1cc",
           }}
         >
           <header className="p-2 backdrop-filter backdrop-blur-sm bg-opacity-10 border border-gray-100 flex items-center justify-end mb-2">
