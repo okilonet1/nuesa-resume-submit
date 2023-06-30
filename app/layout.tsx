@@ -41,8 +41,8 @@ export default function RootLayout({
           }}
         >
           <header className="p-2 backdrop-filter backdrop-blur-sm bg-opacity-10 border border-gray-100 flex items-center justify-end mb-2">
-            <Button variant={"ghost"}>View Students</Button>
             <SignedIn>
+              <Button variant={"ghost"}>View Students</Button>
               <UserButton />
             </SignedIn>
           </header>
