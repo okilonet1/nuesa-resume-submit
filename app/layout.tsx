@@ -12,6 +12,8 @@ import {
 } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 
+import Link from "next/link";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -42,7 +44,9 @@ export default function RootLayout({
         >
           <header className="p-2 backdrop-filter backdrop-blur-sm bg-opacity-10 border border-gray-100 flex items-center justify-end mb-2">
             <SignedIn>
-              <Button variant={"ghost"}>View Students</Button>
+              <Link href={"/view"}>
+                <Button variant={"ghost"}>View Students</Button>
+              </Link>
               <UserButton />
             </SignedIn>
           </header>
