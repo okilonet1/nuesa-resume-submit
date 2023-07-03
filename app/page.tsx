@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { InstagramEmbed } from "react-social-media-embed";
 import axios from "axios";
-import { use, useEffect, useState } from "react";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -29,8 +29,12 @@ const formSchema = z.object({
   name: z.string().min(3).max(255),
   email: z.string().email(),
   phone: z.string().min(10).max(15),
-  resume: z.any(),
-  itLetter: z.any(),
+  resume: z.custom<File[]>().refine((files) => {
+    return files.length > 0;
+  }, "Please Upload a Resume"),
+  itLetter: z.custom<File[]>().refine((files) => {
+    return files.length > 0;
+  }, "Please Upload a Internship Letter"),
 });
 
 export default function Home() {
@@ -42,8 +46,8 @@ export default function Home() {
       name: "",
       email: "",
       phone: "",
-      resume: null,
-      itLetter: null,
+      resume: undefined,
+      itLetter: undefined,
     },
   });
 
@@ -55,24 +59,23 @@ export default function Home() {
     toast.remove("loading");
   }
 
-  console.log(isLoading);
-
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    const data = form.getValues();
-
     const formData = new FormData();
 
-    if (data.resume == null) {
+    if (values.resume == undefined) {
       toast.error("Please Upload a Resume");
-    } else if (data.itLetter == null) {
+    } else if (values.itLetter == undefined) {
       toast.error("Please Upload a Internship Letter");
+    } else if (values.resume[0].size > 5000000) {
+      toast.error("Please your Resume should not be more than 5mb");
+    } else if (values.itLetter[0].size > 5000000) {
+      toast.error("Please your Internship Letter should not be more than 5mb");
     } else {
-      formData.append("resume", data.resume[0]);
-      formData.append("itLetter", data.itLetter[0]);
-      formData.append("name", data.name);
-      formData.append("email", data.email);
-      formData.append("phone", data.phone);
+      formData.append("resume", values.resume[0]);
+      formData.append("itLetter", values.itLetter[0]);
+      formData.append("name", values.name);
+      formData.append("email", values.email);
+      formData.append("phone", values.phone);
 
       setIsLoading(true);
 
@@ -87,7 +90,11 @@ export default function Home() {
           form.reset();
         })
         .catch((err) => {
+          console.log(err);
           console.log(err.response.data);
+          console.log(err.response.status);
+          console.log(err.response);
+
           toast.error(err.response.data || "An error occured");
         })
         .finally(() => {
@@ -125,7 +132,11 @@ export default function Home() {
               <FormItem>
                 <FormLabel>Full Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="John Doe" {...field} />
+                  <Input
+                    placeholder="John Doe"
+                    {...field}
+                    disabled={isLoading}
+                  />
                 </FormControl>
                 <FormDescription>
                   Your Full Name as it appears on your certificate
@@ -141,7 +152,11 @@ export default function Home() {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="johndoe@nuesaabuad.com" {...field} />
+                  <Input
+                    placeholder="johndoe@nuesaabuad.com"
+                    {...field}
+                    disabled={isLoading}
+                  />
                 </FormControl>
                 <FormDescription>Your active email address</FormDescription>
                 <FormMessage />
@@ -155,7 +170,11 @@ export default function Home() {
               <FormItem>
                 <FormLabel>Phone</FormLabel>
                 <FormControl>
-                  <Input placeholder="+234 7057395799" {...field} />
+                  <Input
+                    placeholder="+234 7057395799"
+                    {...field}
+                    disabled={isLoading}
+                  />
                 </FormControl>
                 <FormDescription>Your active phone number</FormDescription>
                 <FormMessage />
@@ -171,6 +190,7 @@ export default function Home() {
                 <FormLabel>Resume/CV</FormLabel>
 
                 <Input
+                  disabled={isLoading}
                   type="file"
                   accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                   {...form.register("resume")}
@@ -195,6 +215,7 @@ export default function Home() {
                   type="file"
                   accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                   {...form.register("itLetter")}
+                  disabled={isLoading}
                 />
 
                 <FormDescription>
