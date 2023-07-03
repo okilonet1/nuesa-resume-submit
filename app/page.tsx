@@ -90,11 +90,6 @@ export default function Home() {
           form.reset();
         })
         .catch((err) => {
-          console.log(err);
-          console.log(err.response.data);
-          console.log(err.response.status);
-          console.log(err.response);
-
           toast.error(err.response.data || "An error occured");
         })
         .finally(() => {
